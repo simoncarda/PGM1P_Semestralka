@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="main.js"></script>
+</head>
+<body>
+    <input type="number" id="inputPenezenka" placeholder="Zadejte částku">
+    <button onclick="naplnitPenezenku()" id="tlacitkoPenezenka">Vlozit do penezenky</button><br>
+
+    <input type="number" disabled id="inputSazka" placeholder="Zadejte sázku">
+    <button onclick="vsadit()"  disabled id="tlacitkoSazka">Vsadit</button><br>
+
+    <button onclick="vzitKartu()" disabled id="vzitKartu">Vzít si kartu</button>
+
+    <p id="zivotyHraceDisplay">Počet životů: 3</p>
+    <p id="penezenkaDisplay">Peněženka: </p>
+    <p id="vsazenoDisplay">Vsazeno: </p>
+
+    <p id="bodyHraceDisplay">Body hráče: </p>
+    <p id="kartyHraceDisplay">Karty hráče: </p>
+
+    <p id="bodyPocitaceDisplay">Body počítače: </p>
+
+<!--     
+    <button onclick="novyBalicek()">TEST</button><br>
+    <button onclick="vzitKartu()">TEST2</button><br>
+    <p id="test"></p> -->
+</body>
+</html>
