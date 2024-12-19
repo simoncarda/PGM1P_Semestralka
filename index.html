@@ -7,29 +7,12 @@
     <link rel="stylesheet" href="style.css">
     <script src="main.js"></script>
 </head>
-<body>
-    <input type="number" id="inputPenezenka" placeholder="Zadejte částku">
-    <button onclick="naplnitPenezenku()" id="tlacitkoPenezenka">Vlozit do penezenky</button><br>
+<body onload="aktualizovat()">
+    <canvas id="zivoty" width="150" height="30" style="border:1px solid #000000;"></canvas><br>
 
-    <input type="number" disabled id="inputSazka" placeholder="Zadejte sázku">
-    <button onclick="vsadit()"  disabled id="tlacitkoSazka">Vsadit</button><br>
-
-    <button onclick="vzitKartu()" disabled id="vzitKartu">Vzít si kartu</button>
-
-    <p id="zivotyHraceDisplay">Počet životů: 3</p>
-    <p id="penezenkaDisplay">Peněženka: </p>
-    <p id="vsazenoDisplay">Vsazeno: </p>
-
-    <p id="bodyHraceDisplay">Body hráče: </p>
-    <p id="kartyHraceDisplay">Karty hráče: </p>
-
-    <p id="bodyPocitaceDisplay">Body počítače: </p>
-
-    <p>blabla</p>
-
-<!--     
-    <button onclick="novyBalicek()">TEST</button><br>
-    <button onclick="vzitKartu()">TEST2</button><br>
-    <p id="test"></p> -->
+    <input id="inputPenezenka" type="number" placeholder="Zadejte částku">
+    <button id="tlacitkoPenezenka" onclick="naplnitPenezenku()">Vlozit do penezenky</button><br>
+    <input id="inputSazka" type="number" placeholder="Zadejte sázku" disabled>
+    <button id="tlacitkoSazka" onclick="vsadit()" disabled>Vsadit</button><br>
 </body>
 </html>
