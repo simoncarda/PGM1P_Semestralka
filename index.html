@@ -8,11 +8,17 @@
     <script src="main.js"></script>
 </head>
 <body onload="aktualizovat()">
-    <canvas id="zivoty" width="150" height="30" style="border:1px solid #000000;"></canvas><br>
+    <div>
+        <canvas id="zivoty" width="150" height="30" style="border:1px solid #000000;"></canvas>
+        <p id="infoPenezenka"></p>
+        <p id="infoSazka"></p>
+    </div>
 
     <input id="inputPenezenka" type="number" placeholder="Zadejte částku">
     <button id="tlacitkoPenezenka" onclick="naplnitPenezenku()">Vlozit do penezenky</button><br>
     <input id="inputSazka" type="number" placeholder="Zadejte sázku" disabled>
     <button id="tlacitkoSazka" onclick="vsadit()" disabled>Vsadit</button><br>
+
+    <button id="vzitKartu" disabled>Vzít kartu</button>
 </body>
 </html>
