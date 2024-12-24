@@ -71,6 +71,7 @@ function novyBalicek() {
     }
     return balicek;
 }
+//dočasná - výpis pole
 function vypsat(x) {
     let text = "";
     for (let i = 0; i < x.length; i++) {
@@ -91,12 +92,13 @@ function aktualizovat(rukaHrac) {
         ctx.stroke();
         ctx.fill();   
     }
-    //zobrazí vytažené karty
-    if (rukaHrac.length != 0) {
+    //zobrazí vytažené karty (pokud jsou zadané do parametru)
+    if (rukaHrac != undefined) {
         for (let i = 0; i < rukaHrac.length; i++) {
             let img = document.getElementById("karta"+i);
             img.src = rukaHrac[i].image;
             img.alt = rukaHrac[i].nazev;
+            img.title = img.alt;
             img.height = "90";
             img.width = "60";
         }
