@@ -1,4 +1,5 @@
 const statsHrac = {jmeno: "hrac1", zivoty: 3, penezenka: 0, cenaZivota: 0, sazka: 0, body: 0};
+const karty = {};
 
 function naplnitPenezenku() {
     let input = Number(document.getElementById("inputPenezenka").value);
@@ -25,13 +26,19 @@ function vsadit() {
         document.getElementById("tlacitkoSazka").disabled = true;
         document.getElementById("vzitKartu").disabled = false;
 
-        const balicek = novyBalicek();
-        const rukaHrac = [];
-        presunoutKartu(balicek, rukaHrac);
-        aktualizovat(rukaHrac);
+        aktualizovat();
     } else{
         alert("Toto vsadit nemůžeš!");
     }
+}
+function vzitKartu() {
+    if (karty.balicek == undefined) {
+        karty.balicek = novyBalicek();
+        karty.hrac = [];
+    }
+    presunoutKartu(karty.balicek, karty.hrac);
+    alert("Vytáhl jste si kartu: " + karty.hrac[karty.hrac.length - 1].nazev);
+    aktualizovat(karty.hrac);
 }
 //přesouvá karty mezi poli
 function presunoutKartu(odkud, kam) {
@@ -42,7 +49,6 @@ function presunoutKartu(odkud, kam) {
     odkud.pop();
 
     statsHrac.body += Number(kam[poziceKam].body);
-    alert("Vytáhl jste si kartu: " + kam[poziceKam].nazev);
 }
 function novyBalicek() {
     const balicek=[];
