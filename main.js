@@ -1,4 +1,5 @@
 const statsHrac = {jmeno: "hrac1", zivoty: 3, penezenka: 0, cenaZivota: 0, sazka: 0, body: 0};
+const statsBot = {body: 0};
 const karty = {};
 
 function naplnitPenezenku() {
@@ -35,11 +36,16 @@ function vzitKartu() {
     if (karty.balicek == undefined) {
         karty.balicek = novyBalicek();
         karty.hrac = [];
+        karty.bot = [];
+        presunoutKartu(karty.balicek, karty.bot);
     }
     presunoutKartu(karty.balicek, karty.hrac);
     alert("Vytáhl jste si kartu: " + karty.hrac[karty.hrac.length - 1].nazev);
+    statsHrac.body += karty.hrac[karty.hrac.length - 1].body;
+    statsBot.body += karty.bot[karty.bot.length - 1].body;
     aktualizovat(karty.hrac);
 }
+
 //přesouvá karty mezi poli
 function presunoutKartu(odkud, kam) {
     let poziceOdkud = odkud.length - 1;
@@ -47,8 +53,6 @@ function presunoutKartu(odkud, kam) {
     kam.push(odkud[poziceOdkud]);
     let poziceKam = kam.length - 1;
     odkud.pop();
-
-    statsHrac.body += Number(kam[poziceKam].body);
 }
 function novyBalicek() {
     const balicek=[];
@@ -61,7 +65,7 @@ function novyBalicek() {
         for (let j = 0; j < hodnoty.length; j++) {
             let nazev = barvy[i] + sklonovani[j] + " " + hodnoty[j]; //vytvoří kartě český název
             let pracNazev = barvy[i] + " " + hodnoty[j] + ".jpg"; //vytvoří název, pod kterým je obrázek dané karty uložen
-            const karta={nazev: nazev, body: body[j], image: `img/${pracNazev}`};
+            const karta={nazev: nazev, body: Number(body[j]), image: `img/${pracNazev}`};
             balicek.push(karta);
         }
     }
