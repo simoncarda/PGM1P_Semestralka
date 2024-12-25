@@ -7,7 +7,7 @@ function naplnitPenezenku() {
     if (input>0) {
         statsHrac.penezenka += input;
         statsHrac.cenaZivota += input/3;
-
+        alert("Nakoupil jste 3 životy, cena jednoho života je: " + statsHrac.cenaZivota);
         document.getElementById("inputPenezenka").disabled = true;
         document.getElementById("tlacitkoPenezenka").disabled = true;
 
@@ -37,15 +37,56 @@ function vzitKartu() {
         karty.balicek = novyBalicek();
         karty.hrac = [];
         karty.bot = [];
+        //banker dostane první kartu (pokud ji už nemá), která zůstává hráči skryta
         presunoutKartu(karty.balicek, karty.bot);
+        statsBot.body += karty.bot[karty.bot.length - 1].body;
     }
+    //hráč dobírá dle libosti
     presunoutKartu(karty.balicek, karty.hrac);
     alert("Vytáhl jste si kartu: " + karty.hrac[karty.hrac.length - 1].nazev);
     statsHrac.body += karty.hrac[karty.hrac.length - 1].body;
-    statsBot.body += karty.bot[karty.bot.length - 1].body;
-    aktualizovat(karty.hrac);
-}
+    aktualizovat(karty.hrac, "karta");
+    document.getElementById("hracMaDost").disabled = false;
 
+    //check, jestli hrac neprohral/nevyhral
+    if (karty.hrac[0].body == karty.hrac[1].body == 11) {
+        //vyhodnoceni (hrac vyhral)
+    }else if (statsHrac.body > 21) {
+        //vyhodnoceni (hrac prohral)
+    }
+}
+function hracMaDost() {
+    document.getElementById("vzitKartu").disabled = true;
+    document.getElementById("kartyBank").innerHTML = "Karty bankéře:"
+    while (statsBot.body < 14) {
+        presunoutKartu(karty.balicek, karty.bot);
+        statsBot.body += karty.bot[karty.bot.length - 1].body;
+    }
+    aktualizovat(karty.bot, "kartaBank");
+    //kontrola prohry/výhry
+    if (karty.bot[0].body == karty.bot[1].body == 11) {
+        //vyhodnoceni (bot vyhral)
+    }else if (statsBot.body > 21) {
+        //vyhodnoceni (bot prohral)
+    }else if (statsHrac.body > statsBot.body) {
+        //vyhodnoceni (hrac vyhral)
+    }else if (statsHrac.body < statsBot.body) {
+        //vyhodnoceni (hrac prohral)
+    }else if (statsHrac.body == statsBot.body) {
+        //nevyhral nikdo, sazky se vraci
+    }
+}
+function vyhodnoceni(tenKdoVyhral) {
+    if (tenKdoVyhral == "hrac") {
+        statsHrac.penezenka += statsHrac.sazka * 2;
+        alert("Vyhrál jsi!! K vyhraným penězům se ti přičítá " + statsHrac.sazka * 2)
+    }else if(tenKdoVyhral == "bank"){
+        statsHrac.zivoty -= statsHrac.sazka/statsHrac.cenaZivota;
+    }else {
+        statsHrac.penezenka += statsHrac.sazka;
+    }
+
+}
 //přesouvá karty mezi poli
 function presunoutKartu(odkud, kam) {
     let poziceOdkud = odkud.length - 1;
@@ -90,7 +131,7 @@ function vypsat(x) {
     console.log(text);
 }
 
-function aktualizovat(rukaHrac) {
+function aktualizovat(rukaHrac, kdo) {
     //vykreslí životy
     let canvas=document.getElementById("zivoty");
     let ctx=canvas.getContext("2d");
@@ -105,7 +146,7 @@ function aktualizovat(rukaHrac) {
     //zobrazí vytažené karty (pokud jsou zadané do parametru)
     if (rukaHrac != undefined) {
         for (let i = 0; i < rukaHrac.length; i++) {
-            let img = document.getElementById("karta"+i);
+            let img = document.getElementById(kdo + i);
             img.src = rukaHrac[i].image;
             img.alt = rukaHrac[i].nazev;
             img.title = img.alt;
