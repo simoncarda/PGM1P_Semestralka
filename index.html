@@ -12,6 +12,7 @@
         <canvas id="zivoty" width="150" height="30" style="border:1px solid #000000;"></canvas>
         <p id="infoPenezenka"></p>
         <p id="infoSazka"></p>
+        <p id="vyhranePenize"></p>
     </div>
 
     <input id="inputPenezenka" type="number" placeholder="Zadejte částku">
@@ -21,6 +22,7 @@
 
     <button id="vzitKartu" onclick="vzitKartu()" disabled>Vzít kartu</button><br>
     <button id="hracMaDost" onclick="hracMaDost()" disabled>Už mám dost karet</button>
+    <p id="bodyHrace">Body hráče: </p>
     <p>Karty hráče:</p><br>
     <div>
         <img id="karta0" src="" alt="">
@@ -53,5 +55,10 @@
         <img id="kartaBank11" src="" alt="">
         <img id="kartaBank12" src="" alt="">
     </div>
+    <button id="dalsiKolo" onclick="dalsiKolo()" disabled>Další kolo</button>
+    <button id="konecHry" onclick="konecHry()" disabled>Ukončit hru a odejít z podniku</button>
+    <button id="dokoupitZivot" onclick="dokoupitZivot()" disabled>Dokoupit jeden život</button>
+    <button id="reset" onclick="hardReset()">RESET</button>
+    <p id="historie">Historie výher a proher:<br></p>
 </body>
 </html>

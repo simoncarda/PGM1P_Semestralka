@@ -21,3 +21,8 @@ Postup hry:
   Pokud hráč prohrál, jsou mu adekvátně odečteny životy
   Pokud mu došly životy, prostě zemře (na tuto skutečnost je upozorněn) :)
   Hráč odchází, nebo hraje dál (musí znovu vsadit)
+
+pozn.:
+penezenka = peníze, které jsou určeny na začátku hry, je mozné ji nabít jen na začátku hry, nebo při kupování životů
+sazka = sazka, z ní jsou peníze výhradně do vyhranePenize, nebo zmizí
+vyhranePenize = lze za ně koupit životy (= dobít penezenku)
