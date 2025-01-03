@@ -187,14 +187,6 @@ function novyBalicek() { //vytvoření a zamíchání nového balíčku
     }
     return balicek;
 }
-//dočasná - výpis pole
-function vypsat(x) {
-    let text = "";
-    for (let i = 0; i < x.length; i++) {
-        text += `${i+1} ${x[i].nazev} ${x[i].body} ${x[i].image}\n`;
-    }
-    console.log(text);
-}
 
 function aktualizovat(ruka, kdo) { //parametry nejsou nutné, jen jsou třeba pro vykreslení karet
     let procento = statsHrac.penezenka/(statsHrac.cenaZivota*3); //kolik procent zivotu je v penezence
