@@ -13,6 +13,8 @@ function naplnitPenezenku() {
 
         document.getElementById("inputSazka").disabled = false;
         document.getElementById("tlacitkoSazka").disabled = false;
+
+        document.getElementById("konecHry").disabled = false;
         aktualizovat();    
     } else{
         alert("Tímto svou peněženku nenaplníš!")
@@ -27,6 +29,7 @@ function vsadit() {
         document.getElementById("tlacitkoSazka").disabled = true;
         document.getElementById("vzitKartu").disabled = false;
 
+        document.getElementById("konecHry").disabled = true;
         aktualizovat();
     } else{
         alert("Toto vsadit nemůžeš!");
@@ -128,7 +131,7 @@ function dokoupitZivot() {
     statsHrac.zivoty += 1;
     statsHrac.penezenka += statsHrac.cenaZivota;
     alert("Dokoupil jste jeden zivot, nyní máte " + statsHrac.zivoty);
-    if (Math.ceil(statsHrac.zivoty) == 3) {
+    if (statsHrac.zivoty == 3) {
         document.getElementById("dokoupitZivot").disabled = true;
     }
     aktualizovat();
@@ -195,7 +198,7 @@ function vypsat(x) {
 
 function aktualizovat(ruka, kdo) { //parametry nejsou nutné, jen jsou třeba pro vykreslení karet
     let procento = statsHrac.penezenka/(statsHrac.cenaZivota*3); //kolik procent zivotu je v penezence
-    if (procento > 0.67) {
+    if (procento > 0.67) { //aktualizuje počet zbývajících životů na základě stavu peněženky
         statsHrac.zivoty = 3;
     }else if(procento > 0.34){
         statsHrac.zivoty = 2;
@@ -208,7 +211,7 @@ function aktualizovat(ruka, kdo) { //parametry nejsou nutné, jen jsou třeba pr
     let canvas=document.getElementById("zivoty");
     let ctx=canvas.getContext("2d");
     ctx.clearRect(0, 0, 150, 30);
-    for (let i = 0; i < Math.ceil(statsHrac.zivoty); i++) {
+    for (let i = 0; i < statsHrac.zivoty; i++) {
         ctx.beginPath();   
         ctx.arc(25 + (i * 50), 15, 15, 0, 2 * Math.PI);
         ctx.fillStyle = "red";
@@ -222,8 +225,10 @@ function aktualizovat(ruka, kdo) { //parametry nejsou nutné, jen jsou třeba pr
     document.getElementById("infoSazka").innerHTML = "Sázka: " + statsHrac.sazka;
     document.getElementById("vyhranePenize").innerHTML = "Vyhrané peníze: " + statsHrac.vyhranePenize;
     document.getElementById("bodyHrace").innerHTML = "Body hráče: " + statsHrac.body;
-    if ((statsHrac.vyhranePenize >= statsHrac.cenaZivota) && (Math.ceil(statsHrac.zivoty) < 3)) {
+    if ((statsHrac.vyhranePenize >= statsHrac.cenaZivota) && (statsHrac.zivoty < 3)) {
         document.getElementById("dokoupitZivot").disabled = false;
+    }else {        
+        document.getElementById("dokoupitZivot").disabled = true;
     }
     
     //zobrazí vytažené karty (pokud jsou zadané do parametru)

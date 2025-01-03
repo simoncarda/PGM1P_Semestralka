@@ -1,8 +1,0 @@
-nákup životů:
-po každém kole možnost
-tlačítko "dokoupit život" dokoupí jeden život, ihned je vykreslen 
-peníze jsou přidány do peněženky
-
-prohra při oku?
-
-došly peníze - disable ukončit hru, alert
