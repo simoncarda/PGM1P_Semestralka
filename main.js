@@ -1,6 +1,7 @@
 const statsHrac = {jmeno: "hrac1", zivoty: 3, penezenka: 0, cenaZivota: 1, sazka: 0, body: 0, vyhranePenize: 0};
 const statsBot = {body: 0};
 const karty = {};
+let sazka = false;
 
 function naplnitPenezenku() {
     let input = Number(document.getElementById("inputPenezenka").value);
@@ -22,9 +23,9 @@ function naplnitPenezenku() {
 }
 function vsadit() {
     let input = Number(document.getElementById("inputSazka").value);
-    if ((input <= statsHrac.penezenka) && (input > 0) && (Number.isInteger(input))) {
+    if ((input <= statsHrac.cenaZivota) && (input > 0) && (Number.isInteger(input))) {
         statsHrac.sazka = input;
-        statsHrac.penezenka -= statsHrac.sazka;
+        statsHrac.vyhranePenize = input;
         document.getElementById("inputSazka").disabled = true;
         document.getElementById("tlacitkoSazka").disabled = true;
         document.getElementById("vzitKartu").disabled = false;
@@ -97,52 +98,72 @@ function hracMaDost() {
 function vyhodnoceni(tenKdoVyhral) {
     document.getElementById("hracMaDost").disabled = true;
     //Podle toho kdo vyhrál se upraví stav hry, zde se přičítají/odečítají peníze!!!
-    if (tenKdoVyhral == "hrac") {
-        statsHrac.vyhranePenize += statsHrac.sazka * 2;
-        statsHrac.sazka = 0;
+    if (tenKdoVyhral == "hrac") { //hráči se k penězům, se kterými hraje, přičte sázka (vyhrál ji)
+        statsHrac.vyhranePenize += statsHrac.sazka;
         document.getElementById("historie").innerHTML += "Výhra<br>"
-        alert("Výhra! Dvojnásobek vsazených peněz se Vám přičítá k vyhraným penězům.");
-    }else if(tenKdoVyhral == "bank"){
-        let ztraceneZivoty = statsHrac.sazka/statsHrac.cenaZivota;
-        statsHrac.zivoty -= ztraceneZivoty;
-        statsHrac.sazka = 0;
+        alert("Výhra!");
+            //reset bez sázky
+        sazka = false;
+        document.getElementById("pokracovat").disabled = false;
+/*         softReset(); //smazat karty a body, nechat sázku, hráč hraje další kolo (rovnou bere kartu, sázka zůstává stejná)
+        document.getElementById("inputSazka").disabled = true;
+        document.getElementById("tlacitkoSazka").disabled = true;
+        document.getElementById("vzitKartu").disabled = false; */
+    }else if(tenKdoVyhral == "bank"){//hráči se od peněz, se kterými hraje, odečte sázka (prohrál ji)
+        statsHrac.vyhranePenize -= statsHrac.sazka;
         document.getElementById("historie").innerHTML += "Prohra<br>"
-        alert("Prohra! Ztrácíte svou sázku.");
-    }else if(tenKdoVyhral == "nikdo"){
-        statsHrac.vyhranePenize += Number(statsHrac.sazka);
-        statsHrac.sazka = 0;
-        document.getElementById("historie").innerHTML += "Remíza<br>"
-        alert("Remíza! Vsazené peníze jsou přičteny k vyhraným penězům, Váš vklad se nezvětšil.");
+        alert("Prohra!");
+        if ((statsHrac.vyhranePenize != 0)) {//pokud hráč neprohrál aktuální obnost peněz, vsází dál
+                //reset bez sázky
+            sazka = false;
+            document.getElementById("pokracovat").disabled = false;
+/*             softReset();
+            document.getElementById("inputSazka").disabled = true;
+            document.getElementById("tlacitkoSazka").disabled = true;
+            document.getElementById("vzitKartu").disabled = false; */
+        }else if((statsHrac.vyhranePenize == 0)) {//pokud hráč prohrál aktuální obnos, odečítá se mu od životů vsazená část života
+            alert("Přišel jste o vsazené peníze a část nebo celý život!")
+            statsHrac.zivoty -= statsHrac.sazka/statsHrac.cenaZivota;
+            statsHrac.penezenka -= statsHrac.sazka;
+            if (statsHrac.zivoty == 0) {//pokud tímto tahem hráči došly životy, hra končí
+                alert("Prohrál jste všechny peníze");
+            }else {//pokud ne, hráč vsází znovu
+                    //reset se sázkou
+                sazka = true;
+                document.getElementById("pokracovat").disabled = false;
+            }
+        }
+    }else if(tenKdoVyhral == "nikdo") {//hráči se od peněz neodečte ani nepřičte nic
+    document.getElementById("historie").innerHTML += "Remíza<br>"
+    alert("Remíza!");
     }
-
+    //výpis karet na konci hry, aby hráč věděl, proti čemu hrál
     aktualizovat(karty.hrac, "karta");
     aktualizovat(karty.bot, "kartaBank");
-
-    if ((statsHrac.zivoty != 0) || (statsHrac.vyhranePenize != 0)) {
-        document.getElementById("dalsiKolo").disabled = false;
-        document.getElementById("konecHry").disabled = false;
-    }else {
-        alert("Došly vám finance, odcházíte z podniku!");
+}
+function pokracovat() {//aby se karty na konci kola stihly zobrazit a hráč si je mohl prohlédnout, musí manuálně pokračovat ve hře
+    softReset(); //smazat karty a body, nechat sázku, hráč hraje další kolo (rovnou bere kartu, sázka zůstává stejná)
+    if (sazka == false) {
+        document.getElementById("inputSazka").disabled = true;
+        document.getElementById("tlacitkoSazka").disabled = true;
+        document.getElementById("vzitKartu").disabled = false;    
     }
+    document.getElementById("pokracovat").disabled = true;
 }
 
-function dokoupitZivot() {
+function dokoupitZivot() {//dokupování životů
     statsHrac.vyhranePenize -= statsHrac.cenaZivota;
+    statsHrac.penezenka += statsHrac.cenaZivota
     statsHrac.zivoty += 1;
-    statsHrac.penezenka += statsHrac.cenaZivota;
     alert("Dokoupil jste jeden zivot, nyní máte " + statsHrac.zivoty);
     if (statsHrac.zivoty == 3) {
         document.getElementById("dokoupitZivot").disabled = true;
     }
     aktualizovat();
 }
-function dalsiKolo() {
-    softReset();
-    document.getElementById("dalsiKolo").disabled = true;
-}
 function konecHry() { //Když hráč zvolí možnost odejít z podniku po konci kola
     if (confirm("Opravdu si přejede ukončit hru?") == true) {
-        let vyhra = statsHrac.penezenka + statsHrac.vyhranePenize;
+        let vyhra = ((statsHrac.zivoty - 1) * statsHrac.cenaZivota) + statsHrac.vyhranePenize;
         alert("Gratuluji, z podniku jste si odnesl " + vyhra + " peněz");
         document.getElementById("konecHry").disabled = true;
         hardReset();
@@ -152,8 +173,7 @@ function konecHry() { //Když hráč zvolí možnost odejít z podniku po konci 
     }
 }
 
-//přesouvá karty mezi poli
-function presunoutKartu(odkud, kam) {
+function presunoutKartu(odkud, kam) {//přesouvá karty mezi poli
     let poziceOdkud = odkud.length - 1;
 
     kam.push(odkud[poziceOdkud]);
@@ -189,22 +209,16 @@ function novyBalicek() { //vytvoření a zamíchání nového balíčku
 }
 
 function aktualizovat(ruka, kdo) { //parametry nejsou nutné, jen jsou třeba pro vykreslení karet
-    let procento = statsHrac.penezenka/(statsHrac.cenaZivota*3); //kolik procent zivotu je v penezence
-    if (procento > 0.67) { //aktualizuje počet zbývajících životů na základě stavu peněženky
-        statsHrac.zivoty = 3;
-    }else if(procento > 0.34){
-        statsHrac.zivoty = 2;
-    }else if(procento > 0){
-        statsHrac.zivoty = 1;
-    }else{
-        statsHrac.zivoty = 0;
-    }
+    //admin zobrazení
+    document.getElementById("zivutky").innerHTML = "Životy: "+statsHrac.zivoty;
+    document.getElementById("cenaZivota").innerHTML = "Cena jednoho života: " + statsHrac.cenaZivota;
+
     //vykreslí životy
     let canvas=document.getElementById("zivoty");
     let ctx=canvas.getContext("2d");
     ctx.clearRect(0, 0, 150, 30);
-    for (let i = 0; i < statsHrac.zivoty; i++) {
-        ctx.beginPath();   
+    for (let i = 0; i < Math.ceil(statsHrac.zivoty); i++) {
+        ctx.beginPath();
         ctx.arc(25 + (i * 50), 15, 15, 0, 2 * Math.PI);
         ctx.fillStyle = "red";
         ctx.strokeStyle="black";
@@ -215,11 +229,11 @@ function aktualizovat(ruka, kdo) { //parametry nejsou nutné, jen jsou třeba pr
     //aktualizace udaju
     document.getElementById("infoPenezenka").innerHTML = "Peněženka: " + statsHrac.penezenka;
     document.getElementById("infoSazka").innerHTML = "Sázka: " + statsHrac.sazka;
-    document.getElementById("vyhranePenize").innerHTML = "Vyhrané peníze: " + statsHrac.vyhranePenize;
+    document.getElementById("vyhranePenize").innerHTML = "Vaše peníze ve hře: " + statsHrac.vyhranePenize;
     document.getElementById("bodyHrace").innerHTML = "Body hráče: " + statsHrac.body;
-    if ((statsHrac.vyhranePenize >= statsHrac.cenaZivota) && (statsHrac.zivoty < 3)) {
+    if ((statsHrac.vyhranePenize >= 2*(statsHrac.cenaZivota)) && (statsHrac.zivoty < 3)) {//zpřístupní dokupování života, pokud na to hráč má finance a pokud nemá plné životy
         document.getElementById("dokoupitZivot").disabled = false;
-    }else {        
+    }else {
         document.getElementById("dokoupitZivot").disabled = true;
     }
     
@@ -236,14 +250,13 @@ function aktualizovat(ruka, kdo) { //parametry nejsou nutné, jen jsou třeba pr
     }
 }
 
-function softReset() { //resetuje karty, body a tlačítka
+function softReset() { //resetuje karty, body a tlačítka. Nechá hráče znovu vsadit. Nemaže sázku, tu přepisuje hráč sám
     document.getElementById("inputPenezenka").disabled = true;
     document.getElementById("tlacitkoPenezenka").disabled = true;
     document.getElementById("inputSazka").disabled = false;
     document.getElementById("tlacitkoSazka").disabled = false;
     document.getElementById("vzitKartu").disabled = true;
     document.getElementById("hracMaDost").disabled = true;
-    document.getElementById("dalsiKolo").disabled = true;
     document.getElementById("konecHry").disabled = true;
 
     //smaže karty ze stolu
@@ -271,7 +284,7 @@ function softReset() { //resetuje karty, body a tlačítka
     statsHrac.body = 0;
     aktualizovat()
 }
-function hardReset() { //resetuje navic všechny staty hrace
+function hardReset() { //resetuje vše do původní podoby
     softReset();
     document.getElementById("inputPenezenka").disabled = false;
     document.getElementById("tlacitkoPenezenka").disabled = false;
@@ -285,5 +298,9 @@ function hardReset() { //resetuje navic všechny staty hrace
     statsHrac.cenaZivota = 1;
     statsHrac.sazka = 0;
     statsHrac.vyhranePenize = 0;
+    start();
+}
+function start() {//funkce, která je pouze pro body onload, potřeboval jsem obejít prvotní aktualizaci údaje cenaZivota, aby na zacatku nebyl "1". Pri realné zmene prvotního nastavení by se kod mohl rozbít.
     aktualizovat();
+    document.getElementById("cenaZivota").innerHTML = "Cena jednoho života: " + 0;
 }
