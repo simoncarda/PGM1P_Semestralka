@@ -105,10 +105,6 @@ function vyhodnoceni(tenKdoVyhral) {
             //reset bez sázky
         sazka = false;
         document.getElementById("pokracovat").disabled = false;
-/*         softReset(); //smazat karty a body, nechat sázku, hráč hraje další kolo (rovnou bere kartu, sázka zůstává stejná)
-        document.getElementById("inputSazka").disabled = true;
-        document.getElementById("tlacitkoSazka").disabled = true;
-        document.getElementById("vzitKartu").disabled = false; */
     }else if(tenKdoVyhral == "bank"){//hráči se od peněz, se kterými hraje, odečte sázka (prohrál ji)
         statsHrac.vyhranePenize -= statsHrac.sazka;
         document.getElementById("historie").innerHTML += "Prohra<br>"
@@ -117,10 +113,6 @@ function vyhodnoceni(tenKdoVyhral) {
                 //reset bez sázky
             sazka = false;
             document.getElementById("pokracovat").disabled = false;
-/*             softReset();
-            document.getElementById("inputSazka").disabled = true;
-            document.getElementById("tlacitkoSazka").disabled = true;
-            document.getElementById("vzitKartu").disabled = false; */
         }else if((statsHrac.vyhranePenize == 0)) {//pokud hráč prohrál aktuální obnos, odečítá se mu od životů vsazená část života
             alert("Přišel jste o vsazené peníze a část nebo celý život!")
             statsHrac.zivoty -= statsHrac.sazka/statsHrac.cenaZivota;
@@ -135,6 +127,9 @@ function vyhodnoceni(tenKdoVyhral) {
         }
     }else if(tenKdoVyhral == "nikdo") {//hráči se od peněz neodečte ani nepřičte nic
     document.getElementById("historie").innerHTML += "Remíza<br>"
+        //reset bez sázky
+    sazka = false;
+    document.getElementById("pokracovat").disabled = false;
     alert("Remíza!");
     }
     //výpis karet na konci hry, aby hráč věděl, proti čemu hrál
@@ -143,7 +138,7 @@ function vyhodnoceni(tenKdoVyhral) {
 }
 function pokracovat() {//aby se karty na konci kola stihly zobrazit a hráč si je mohl prohlédnout, musí manuálně pokračovat ve hře
     softReset(); //smazat karty a body, nechat sázku, hráč hraje další kolo (rovnou bere kartu, sázka zůstává stejná)
-    if (sazka == false) {
+    if (sazka == false) {//pokud hráč nemá znovu vsadit, uzamknou se input a tlačítko pro sázku a odemkne se rovnou braní karty
         document.getElementById("inputSazka").disabled = true;
         document.getElementById("tlacitkoSazka").disabled = true;
         document.getElementById("vzitKartu").disabled = false;    
